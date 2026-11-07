@@ -15,15 +15,19 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from ml_core import evaluate
+from data_quality import clean_training_data, inspect_training_outliers
 
 ROOT = Path(__file__).resolve().parent
 
 
 def main():
     dataset = load_breast_cancer(as_frame=True)
-    x = dataset.data
     # sklearn encodes malignant as 0; invert so clinical positive is malignant.
-    y = (1 - dataset.target).rename('target')
+    source = dataset.data.copy()
+    source['target'] = 1 - dataset.target
+    cleaned, audit = clean_training_data(source, list(dataset.data.columns))
+    x = cleaned.drop(columns='target')
+    y = cleaned['target']
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=0.2, stratify=y, random_state=42)
     models = {
@@ -35,6 +39,15 @@ def main():
     }
     (ROOT / 'model').mkdir(exist_ok=True)
     (ROOT / 'results').mkdir(exist_ok=True)
+    outliers, outlier_summary = inspect_training_outliers(x_train)
+    outliers.to_csv(ROOT / 'results' / 'training_outliers.csv', index=False)
+    audit['outlier_inspection'] = outlier_summary
+    (ROOT / 'results' / 'data_quality.json').write_text(
+        json.dumps(audit, indent=2, allow_nan=False), encoding='utf-8')
+    print(f"Data cleaning: {audit['rows_before_cleaning']} source rows, "
+          f"{audit['duplicate_rows_removed']} duplicates removed, "
+          f"{audit['missing_values_total']} missing values.")
+    print(f"Training-only IQR inspection: {outlier_summary['rows_with_any_outlier']} rows flagged; all retained.")
     rows, cv_rows = [], []
     for name, (slug, estimator) in models.items():
         cv = cross_validate(estimator, x_train, y_train,

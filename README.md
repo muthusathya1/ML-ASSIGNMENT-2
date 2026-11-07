@@ -21,6 +21,27 @@ There are 357 benign and 212 malignant samples. **This project recodes target as
 - Precision, recall and F1 are binary scores for malignant=1. AUC uses continuous malignant probabilities, or the SVM decision function. MCC and accuracy use predicted classes.
 - Undefined precision/recall/F1 use zero. Single-class uploads display AUC as N/A. Such uploads are insufficient for a meaningful full comparison.
 
+### Data cleaning and quality checks
+
+`train.py` runs the checks in `data_quality.py` before the stratified split. It validates the numeric feature schema, finite values and binary labels, then removes exact duplicate labelled records while preserving the first occurrence. Identical feature records with conflicting labels cause an explicit error for investigation. Removing repeats before splitting prevents identical records from leaking across train and test sets.
+
+| Check | Result | Action |
+|---|---:|---|
+| Source records | 569 | All retained |
+| Missing values (features and target) | 0 | No imputation needed |
+| Infinite or invalid numeric values | 0 | Validation passed |
+| Duplicate feature rows | 0 | No repeated measurements found |
+| Exact duplicate labelled records | 0 | Deduplication removed 0 rows |
+| Constant training features | 0 | No features removed |
+| Training rows with at least one IQR outlier flag | 135 of 455 | Retained for modeling |
+| Flagged training feature values | 494 | Inspected through per-feature summary |
+
+Missing or invalid values cause training to stop with an error rather than silently deleting observations. Since this dataset is complete, an imputer is unnecessary. If another dataset required imputation, its parameters would need to be fitted inside each training pipeline and cross-validation fold.
+
+Outlier inspection uses **training features only**: values below Q1 - 1.5 x IQR or above Q3 + 1.5 x IQR are flagged separately for each feature. Thresholds never use the test set or target labels. An IQR flag does not establish a data error; extreme cell measurements may be useful classification signals. No outlier removal or clipping is applied. StandardScaler subsequently fits on the training data inside the relevant model pipelines.
+
+The reproducible audit is saved in `results/data_quality.json`; quartiles, fences, counts and proportions for all 30 training features are saved in `results/training_outliers.csv`. Uploaded evaluation CSVs remain subject to strict validation and are evaluated as supplied, without silently removing duplicate test rows. The existing 455/114 split and all reported metrics are unchanged after running the audit.
+
 ## c. GitHub Repository Link
 
 [GitHub repository](https://github.com/muthusathya1/ML-ASSIGNMENT-2)
@@ -82,10 +103,11 @@ Use the exact 30 feature headers in `test_data.csv` plus `target`. Columns may b
 
 - `train.py`: offline training, cross-validation, held-out export and model persistence.
 - `ml_core.py`: shared validation and metric calculation.
+- `data_quality.py`: source validation, duplicate removal and training-only outlier inspection.
 - `app.py`: interactive saved-model evaluation.
 - `model/`: five joblib pipelines and metadata containing feature names, versions and split row indices.
 - `test_data.csv`: 114 held-out rows with target.
-- `results/`: computed holdout metrics and training cross-validation metrics.
+- `results/`: computed holdout metrics, training cross-validation metrics, data-quality audit and per-feature training outlier summary.
 
 Saved scikit-learn artifacts require compatible dependencies; use pinned requirements and regenerate artifacts after changing scikit-learn. Only load trusted joblib files. Models are loaded from this project's model directory, never from uploaded files.
 
