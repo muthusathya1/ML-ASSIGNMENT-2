@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+tmp/
+*.log
+docs/superpowers/
+.codex/
+.agents/
+AGENTS.md
+tests/
