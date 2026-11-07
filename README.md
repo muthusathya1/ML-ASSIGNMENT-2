@@ -46,6 +46,8 @@ The reproducible audit is saved in `results/data_quality.json`; quartiles, fence
 
 [GitHub repository](https://github.com/muthusathya1/ML-ASSIGNMENT-2)
 
+[README.md](https://github.com/muthusathya1/ML-ASSIGNMENT-2/blob/main/README.md)
+
 [Live Streamlit app](https://muthusathya1-ml-assignment-2-app-l7dhor.streamlit.app/)
 
 ## d. Models used
@@ -111,10 +113,12 @@ Use the exact 30 feature headers in `test_data.csv` plus `target`. Columns may b
 
 Saved scikit-learn artifacts require compatible dependencies; use pinned requirements and regenerate artifacts after changing scikit-learn. Only load trusted joblib files. Models are loaded from this project's model directory, never from uploaded files.
 
-## BITS Virtual Lab execution and submission
+## Inference and conclusion
 
-Training was executed in BITS Virtual Lab on 7 November 2026 using Python 3.12. It reproduced the five-model metrics above, including the data-quality and training-only outlier audit. The Streamlit app was also run inside the lab; the execution screenshot shows an uploaded `test_data.csv` with 114 rows, the six Logistic Regression metrics and the comparison of all five models.
+On the held-out test set of 114 samples (72 benign and 42 malignant), Support Vector Machine achieved the highest accuracy (97.37%), F1 score (0.9630) and MCC (0.9442). It correctly classified 111 samples, with no false positives and three false negatives. Its malignant-case recall of 92.86% shows that the three missed malignant cases remain a limitation despite the high overall accuracy.
 
-The submission PDF contains, in order, the GitHub repository link, live Streamlit app link, authentic BITS Virtual Lab execution screenshot and full README content. The screenshot is included in the submission document rather than the source repository.
+Logistic Regression achieved the highest test AUC (0.9960), indicating strong separation of the two classes across decision thresholds. It matched SVM's malignant-case recall but produced one false positive. It also had the highest mean training-only cross-validation AUC (0.9958), making it the preferred model under the predefined selection criterion. SVM was the strongest model on this particular test set when judged by accuracy, F1 and MCC.
 
-Review the submission PDF and submit it through the course portal before 8 November 2026, 23:59 (per assignment brief).
+KNN was competitive with 95.61% accuracy and 90.48% malignant-case recall. Naive Bayes produced no false positives but missed seven malignant cases, while the Decision Tree missed nine and had the lowest recall (78.57%). These results show why accuracy and precision should be considered alongside recall, F1 and MCC: a model can have high precision while still missing malignant cases.
+
+The cleaning audit found no missing values or duplicate records. All training outlier flags were retained, and scaling was fitted only on training data inside the appropriate pipelines. The results therefore reflect a consistent comparison using the same held-out samples and preprocessing fitted without test-data leakage. Since SVM and Logistic Regression differ by only one correctly classified sample, this single split does not establish that either model will always perform better. The findings support SVM as the observed test-set winner and Logistic Regression as the training-CV selection, with further evaluation needed before drawing broader conclusions.
