@@ -23,7 +23,9 @@ There are 357 benign and 212 malignant samples. **This project recodes target as
 
 ## c. GitHub Repository Link
 
-Repository URL will be added after publication. Streamlit Community Cloud deployment is pending.
+[GitHub repository](https://github.com/muthusathya1/ML-ASSIGNMENT-2)
+
+Streamlit Community Cloud deployment is pending.
 
 ## d. Models used
 
