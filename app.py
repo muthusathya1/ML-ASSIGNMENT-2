@@ -62,7 +62,11 @@ for column, (name, value) in zip(st.columns(6), scores.items()):
 
 comparison = pd.DataFrame([{'Model': name, **evaluate(model, x, y)} for name, model in models.items()]).set_index('Model')
 st.subheader('All five models · same test data')
-st.dataframe(comparison.style.format('{:.4f}', na_rep='N/A'), width='stretch')
+st.dataframe(
+    comparison,
+    column_config={name: st.column_config.NumberColumn(format='%.4f') for name in comparison.columns},
+    width='stretch',
+)
 st.download_button('Download comparison results', comparison.to_csv().encode(), 'comparison.csv', 'text/csv')
 
 left, right = st.columns(2)
