@@ -25,7 +25,7 @@ There are 357 benign and 212 malignant samples. **This project recodes target as
 
 [GitHub repository](https://github.com/muthusathya1/ML-ASSIGNMENT-2)
 
-Streamlit Community Cloud deployment is pending.
+[Live Streamlit app](https://muthusathya1-ml-assignment-2-app-l7dhor.streamlit.app/)
 
 ## d. Models used
 
@@ -93,7 +93,7 @@ Saved scikit-learn artifacts require compatible dependencies; use pinned require
 
 1. Review the experimental results and model explanations.
 2. Execute the project on BITS Virtual Lab and capture an authentic screenshot. Local execution does not satisfy that requirement.
-3. Publish source, requirements, README, test CSV and all model artifacts to GitHub; update the repository link above.
-4. Deploy `app.py` on Streamlit Community Cloud using the repository and compatible Python environment; verify CSV upload and all model selections.
-5. Prepare the final single PDF in required order: GitHub link, live app link, BITS execution screenshot, full README content. No final submission PDF is produced yet because the links and BITS evidence are pending.
+3. GitHub repository and live Streamlit app links are provided in section c above.
+4. Verify CSV upload and all model selections in the deployed app.
+5. Prepare the final single PDF in required order: GitHub link, live app link, BITS execution screenshot, full README content. The final submission PDF still requires authentic BITS execution evidence.
 6. Submit before 8 November 2026, 23:59 (per assignment brief).
