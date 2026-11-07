@@ -111,11 +111,10 @@ Use the exact 30 feature headers in `test_data.csv` plus `target`. Columns may b
 
 Saved scikit-learn artifacts require compatible dependencies; use pinned requirements and regenerate artifacts after changing scikit-learn. Only load trusted joblib files. Models are loaded from this project's model directory, never from uploaded files.
 
-## Remaining submission steps
+## BITS Virtual Lab execution and submission
 
-1. Review the experimental results and model explanations.
-2. Execute the project on BITS Virtual Lab and capture an authentic screenshot. Local execution does not satisfy that requirement.
-3. GitHub repository and live Streamlit app links are provided in section c above.
-4. Verify CSV upload and all model selections in the deployed app.
-5. Prepare the final single PDF in required order: GitHub link, live app link, BITS execution screenshot, full README content. The final submission PDF still requires authentic BITS execution evidence.
-6. Submit before 8 November 2026, 23:59 (per assignment brief).
+Training was executed in BITS Virtual Lab on 7 November 2026 using Python 3.12. It reproduced the five-model metrics above, including the data-quality and training-only outlier audit. The Streamlit app was also run inside the lab; the execution screenshot shows an uploaded `test_data.csv` with 114 rows, the six Logistic Regression metrics and the comparison of all five models.
+
+The submission PDF contains, in order, the GitHub repository link, live Streamlit app link, authentic BITS Virtual Lab execution screenshot and full README content. The screenshot is included in the submission document rather than the source repository.
+
+Review the submission PDF and submit it through the course portal before 8 November 2026, 23:59 (per assignment brief).
